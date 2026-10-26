@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ytm2j"
+version = "0.1.0"
+description = "Cross-platform YouTube Music -> local folders (one folder per playlist) downloader powered by yt-dlp"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "mob5824" }]
+keywords = ["youtube-music", "yt-dlp", "jellyfin", "downloader", "music"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Environment :: Web Environment",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Multimedia :: Sound/Audio",
+]
+dependencies = [
+    "yt-dlp>=2024.1.0",
+    "fastapi>=0.110",
+    "uvicorn>=0.27",
+]
+
+[project.optional-dependencies]
+# Bundled ffmpeg binary (cross-platform, no system install needed)
+ffmpeg = ["imageio-ffmpeg>=0.4.7"]
+# Extras used only when running the tests
+dev = ["pytest>=7", "pytest-asyncio>=0.23", "httpx>=0.27"]
+
+[project.scripts]
+ytm2j = "ytm2j.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/mob5824m-wq/YoutubeMusic-To-Jellyfin"
+Issues = "https://github.com/mob5824m-wq/YoutubeMusic-To-Jellyfin/issues"
+
+[tool.setuptools]
+packages = ["ytm2j"]
+
+[tool.setuptools.package-data]
+ytm2j = ["static/*", "static/**/*"]
+
+[tool.ytm2j]
+# Defaults are read by ytm2j.config; kept here so `pip install .` is self-documenting.
+default_audio_format = "mp3"
+default_audio_quality = "320"
+default_port = 8765
