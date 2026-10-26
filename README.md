@@ -116,12 +116,30 @@ scraping fragile YouTube web endpoints.
 
 ### 1. Create a Google OAuth client
 
+**a) Enable the API**
+
 1. Open the [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
    and select (or create) a project.
-2. **APIs & Services → Library** → enable **YouTube Data API v3**.
-3. **Credentials → Create credentials → OAuth client ID**.
-4. Choose **Desktop app** as the application type.
-5. **Download the JSON** file (named `client_secret.json`).
+2. **APIs & Services → Library** → search for **YouTube Data API v3** → **Enable**.
+
+**b) Set up the OAuth consent screen** (required before you can create a client)
+
+1. **APIs & Services → OAuth consent screen** → choose **External**.
+2. App name (e.g. `ytm2j`) and a contact email.
+3. **Test users** → add **your own email**. While the app is in *Testing*
+   status, only these accounts can approve access.
+4. **Scopes** → add `https://www.googleapis.com/auth/youtube.readonly`.
+5. **Save**.
+
+**c) Create the client**
+
+1. **APIs & Services → Credentials** → **Create credentials → OAuth client ID**.
+2. **Application type:** **Desktop app**.
+3. **Download the JSON** file (named `client_secret.json`).
+
+> **Desktop app** clients accept any loopback redirect URI, so the app's
+> `http://localhost:8766/auth/callback` works with no extra configuration —
+> there's no "authorized redirect URIs" field to fill in.
 
 ### 2. Give ytm2j the credentials
 
@@ -178,6 +196,10 @@ port (containers, remote machines, WSL).
 
 - The token requests the `https://www.googleapis.com/auth/youtube.readonly`
   scope — read-only access to your YouTube account. No upload or delete rights.
+- **Testing status:** while the client is unpublished, only the email(s) you
+  listed under *Test users* can approve the consent screen. Publishing to
+  production needs a Privacy Policy URL and Google verification — unnecessary
+  for a personal setup.
 - OAuth lists playlists and tracks via the **YouTube Data API**. Downloads
   still use yt-dlp, and for **private/liked** content yt-dlp needs cookies —
   so configure a cookie source as well.
