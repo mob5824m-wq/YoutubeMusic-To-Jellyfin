@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ytm2j &middot; YouTube Music &rarr; folders</title>
+  <link rel="stylesheet" href="/static/app.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%B5%3C/text%3E%3C/svg%3E" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">&#9835;</span>
+      <div>
+        <h1>ytm2j</h1>
+        <p class="tag">YouTube Music &rarr; local folders, one folder per playlist</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <span id="auth-badge" class="badge badge-muted">Google: not connected</span>
+      <span id="cookie-badge" class="badge badge-muted">checking cookies…</span>
+      <button id="btn-google" class="btn">Connect Google</button>
+      <button id="btn-discover" class="btn btn-primary">Discover playlists</button>
+      <button id="btn-settings" class="btn">Settings</button>
+    </div>
+  </header>
+
+  <main class="grid">
+    <!-- ------------------------- Playlists ------------------------- -->
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Playlists</h2>
+        <div class="panel-tools">
+          <input id="search" type="search" placeholder="Search…" class="input input-sm" />
+          <button id="btn-download-selected" class="btn btn-accent btn-sm" disabled>
+            Download selected <span id="sel-count" class="pill">0</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="add-row">
+        <input id="add-url" class="input" placeholder="Paste a playlist URL or list ID, or @channel" />
+        <button id="btn-add" class="btn">Add</button>
+      </div>
+
+      <ul id="playlists" class="list"></ul>
+      <p id="playlist-empty" class="empty">No playlists yet. Click <b>Discover playlists</b> or paste a URL above.</p>
+    </section>
+
+    <!-- ------------------------- Jobs ------------------------------- -->
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Downloads</h2>
+        <div class="panel-tools">
+          <button id="btn-clear" class="btn btn-sm">Clear finished</button>
+        </div>
+      </div>
+      <ul id="jobs" class="list"></ul>
+      <p id="jobs-empty" class="empty">Nothing queued.</p>
+    </section>
+  </main>
+
+  <!-- ------------------------- Settings modal --------------------- -->
+  <div id="settings-modal" class="modal" hidden>
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2>Settings</h2>
+        <button id="btn-settings-close" class="btn btn-sm">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <label>Google account &middot; YouTube Data API</label>
+          <div class="form-grid">
+            <div class="form-row">
+              <input id="set-clientid" class="input" type="text" placeholder="client_id (or set GOOGLE_CLIENT_ID)" />
+            </div>
+            <div class="form-row">
+              <input id="set-clientsecret" class="input" type="text" placeholder="client_secret (optional)" />
+            </div>
+          </div>
+          <div class="auth-flow">
+            <div class="auth-status" id="auth-status-text"></div>
+            <div class="auth-actions">
+              <button id="btn-google-connect" class="btn btn-primary btn-sm">Connect Google</button>
+              <button id="btn-google-logout" class="btn btn-sm">Disconnect</button>
+            </div>
+            <textarea id="auth-url" class="input" rows="2" readonly placeholder="Authorization URL appears here…"></textarea>
+            <div class="add-row">
+              <input id="auth-code" class="input" placeholder="Paste the redirect URL or code here" />
+              <button id="btn-google-complete" class="btn btn-sm">Complete</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <label for="set-output">Output directory</label>
+          <input id="set-output" class="input" type="text" />
+          <p class="hint" id="set-output-hint"></p>
+        </div>
+        <div class="form-grid">
+          <div class="form-row">
+            <label for="set-format">Audio format</label>
+            <select id="set-format" class="input"></select>
+          </div>
+          <div class="form-row">
+            <label for="set-quality">Bitrate</label>
+            <input id="set-quality" class="input" type="text" placeholder="320" />
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Cookie source</label>
+          <div class="form-grid">
+            <div class="form-row">
+              <select id="set-browser" class="input"></select>
+            </div>
+            <div class="form-row">
+              <input id="set-cookiefile" class="input" type="text" placeholder="cookies.txt path (optional)" />
+            </div>
+          </div>
+          <p class="hint" id="set-cookie-hint"></p>
+        </div>
+        <div class="form-grid">
+          <label class="check"><input id="set-art" type="checkbox" /> Embed cover art</label>
+          <label class="check"><input id="set-meta" type="checkbox" /> Write metadata tags</label>
+        </div>
+        <div class="form-row">
+          <label for="set-player">Player client (optional)</label>
+          <input id="set-player" class="input" type="text" placeholder="e.g. web_music, default" />
+          <p class="hint">Some YouTube clients need a PO token. Leave blank for the default.</p>
+        </div>
+        <p id="set-error" class="error"></p>
+      </div>
+      <div class="modal-foot">
+        <button id="btn-settings-cancel" class="btn">Cancel</button>
+        <button id="btn-settings-save" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

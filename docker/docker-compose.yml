@@ -1,0 +1,23 @@
+services:
+  ytm2j:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: ytm2j:latest
+    container_name: ytm2j
+    ports:
+      - "8765:8765"
+    environment:
+      - YTM2J_OUTPUT_DIR=/data/music
+      # Cookie source for private playlists. Prefer a mounted cookies.txt
+      # over passing your browser profile into a container.
+      - YTM2J_COOKIE_FILE=/data/cookies.txt
+    volumes:
+      - ../music:/data/music
+      - ytm2j-config:/data/config
+      # Drop a Netscape-format cookies.txt here to unlock private playlists:
+      #   ./cookies.txt:/data/cookies.txt
+    restart: unless-stopped
+
+volumes:
+  ytm2j-config:
